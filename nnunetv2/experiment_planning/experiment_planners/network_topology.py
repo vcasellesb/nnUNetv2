@@ -26,6 +26,19 @@ def pad_shape(shape, must_be_divisible_by):
     new_shp = np.array(new_shp).astype(int)
     return new_shp
 
+def pad_shape_2(shape, must_be_divisible_by):
+    
+    dim = len(shape)
+    if not isinstance(must_be_divisible_by, (tuple, list, np.ndarray)):
+        must_be_divisible_by = [must_be_divisible_by] * dim
+    else:
+        assert len(must_be_divisible_by) == dim
+
+    remainders = [shape[i] % must_be_divisible_by[i] for i in range(dim)]
+
+    new_shp = [shape[i] + (must_be_divisible_by[i] - remainders[i]) * bool(remainders[i]) for i in range(dim)]
+
+    return np.array(new_shp).astype(int)
 
 def get_pool_and_conv_props(spacing, patch_size, min_feature_map_size, max_numpool):
     """
@@ -106,3 +119,12 @@ def get_pool_and_conv_props(spacing, patch_size, min_feature_map_size, max_numpo
     # we need to add one more conv_kernel_size for the bottleneck. We always use 3x3(x3) conv here
     conv_kernel_sizes.append([3]*dim)
     return num_pool_per_axis, _to_tuple(pool_op_kernel_sizes), _to_tuple(conv_kernel_sizes), tuple(patch_size), must_be_divisible_by
+
+
+if __name__ == "__main__":
+    
+    shape, must_be_div_by = (119, 119, 249), (20, 20, 20)
+    assert (pad_shape(shape, must_be_div_by) == pad_shape_2(shape, must_be_div_by)).all()
+
+    shape, must_be_div_by = (90, 90, 90), (16, 16, 16)
+    assert (pad_shape(shape, must_be_div_by) == pad_shape_2(shape, must_be_div_by)).all() and (pad_shape_2(shape, must_be_div_by) == np.array([96] * 3)).all()
