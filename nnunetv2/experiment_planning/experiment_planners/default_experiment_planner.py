@@ -51,8 +51,8 @@ class ExperimentPlanner(object):
         self.UNet_class = PlainConvUNet
         # the following two numbers are really arbitrary and were set to reproduce nnU-Net v1's configurations as
         # much as possible
-        self.UNet_reference_val_3d = 560000000  # 455600128  550000000
-        self.UNet_reference_val_2d = 85000000  # 83252480
+        self.UNet_reference_val_3d = 560_000_000  # 455600128  550000000
+        self.UNet_reference_val_2d = 85_000_000  # 83252480
         self.UNet_reference_com_nfeatures = 32
         self.UNet_reference_val_corresp_GB = 8
         self.UNet_reference_val_corresp_bs_2d = 12
@@ -219,6 +219,9 @@ class ExperimentPlanner(object):
         # todo we should use shapes for that as well. Not quite sure how yet
         target_spacing = self.determine_fullres_target_spacing()
 
+        # essentially what this does is move the axis with greater
+        # spacing (lowest resolution) to the "front" of the array 
+        # (X dim)
         max_spacing_axis = np.argmax(target_spacing)
         remaining_axes = [i for i in list(range(3)) if i != max_spacing_axis]
         transpose_forward = [max_spacing_axis] + remaining_axes
