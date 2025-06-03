@@ -336,14 +336,35 @@ def example_test_case_preprocessing():
     # voila. Now plug data into your prediction function of choice. We of course recommend nnU-Net's default (TODO)
     return data
 
+def another_example_preprocessing():
+    plans_file = '/Users/vicentcaselles/work/research/MICCAI-2025-multi-spine/nnUNet_results/Dataset999_MULTISPINE/nnUNetTrainerNoDeepSupervision__nnUNetLessStagesPlans__3d_fullres/plans.json'
+    dataset_json_file = '/Users/vicentcaselles/work/research/MICCAI-2025-multi-spine/nnUNet_results/Dataset999_MULTISPINE/nnUNetTrainerNoDeepSupervision__nnUNetLessStagesPlans__3d_fullres/dataset.json'
+    input_images = ['/Users/vicentcaselles/work/research/MICCAI-2025-multi-spine/nnUNet_raw/Dataset999_MULTISPINE/imagesTr/MULTISPINE_28698_0000.nii.gz']
+
+    configuration = '3d_fullres'
+    pp = DefaultPreprocessor()
+
+    # _ because this position would be the segmentation if seg_file was not None (training case)
+    # even if you have the segmentation, don't put the file there! You should always evaluate in the original
+    # resolution. What comes out of the preprocessor might have been resampled to some other image resolution (as
+    # specified by plans)
+    plans_manager = PlansManager(plans_file)
+    data, _, properties = pp.run_case(input_images, seg_file=None, plans_manager=plans_manager,
+                                      configuration_manager=plans_manager.get_configuration(configuration),
+                                      dataset_json=dataset_json_file)
+
+    # voila. Now plug data into your prediction function of choice. We of course recommend nnU-Net's default (TODO)
+    return data, properties
+
 
 if __name__ == '__main__':
-    # example_test_case_preprocessing()
+    data, properties = another_example_preprocessing()
+    print(properties['spacing'])
     # pp = DefaultPreprocessor()
     # pp.run(2, '2d', 'nnUNetPlans', 8)
 
-    ###########################################################################################################
-    # how to process a test cases? This is an example:
+    ##########################################################################################################
+    # # how to process a test cases? This is an example:
     # example_test_case_preprocessing()
-    seg = SimpleITK.GetArrayFromImage(SimpleITK.ReadImage('/home/isensee/temp/H-mito-val-v2.nii.gz'))[None]
-    DefaultPreprocessor._sample_foreground_locations(seg, np.arange(1, np.max(seg) + 1))
+    # seg = SimpleITK.GetArrayFromImage(SimpleITK.ReadImage('/home/isensee/temp/H-mito-val-v2.nii.gz'))[None]
+    # DefaultPreprocessor._sample_foreground_locations(seg, np.arange(1, np.max(seg) + 1))
