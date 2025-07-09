@@ -1,0 +1,1 @@
+from .mednextv2 import MedNeXT
