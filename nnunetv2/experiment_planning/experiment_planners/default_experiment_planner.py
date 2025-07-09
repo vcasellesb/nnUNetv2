@@ -440,8 +440,6 @@ class ExperimentPlanner(object):
                                                                new_median_shape_transposed,
                                                                self.generate_data_identifier('3d_fullres'),
                                                                approximate_n_voxels_dataset, _tmp)
-            print(plan_3d_fullres)
-            exit()
             # maybe add 3d_lowres as well
             patch_size_fullres = plan_3d_fullres['patch_size']
             median_num_voxels = np.prod(new_median_shape_transposed, dtype=np.float64)

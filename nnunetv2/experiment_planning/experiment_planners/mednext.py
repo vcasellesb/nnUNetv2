@@ -121,15 +121,12 @@ class MedNextPlanner(nnUNetPlannerResEncL):
         ref_bs = self.UNet_reference_val_corresp_bs_2d if len(spacing) == 2 else self.UNet_reference_val_corresp_bs_3d
         # we enforce a batch size of at least two, reference values may have been computed for different batch sizes.
         # Correct for that in the while loop if statement
-        it = 1
         while (estimate / ref_bs * 2) > reference:
-            print(f'{it}nth iteration!')
-            it+=1
+
             # print(patch_size, estimate, reference)
             # patch size seems to be too large, so we need to reduce it. Reduce the axis that currently violates the
             # aspect ratio the most (that is the largest relative to median shape)
             axis_to_be_reduced = np.argsort([i / j for i, j in zip(patch_size, median_shape[:len(spacing)])])[-1]
-            print(axis_to_be_reduced)
 
             # we cannot simply reduce that axis by shape_must_be_divisible_by[axis_to_be_reduced] because this
             # may cause us to skip some valid sizes, for example shape_must_be_divisible_by is 64 for a shape of 256.
