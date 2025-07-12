@@ -64,7 +64,7 @@ def use_nnunet(datas, segs):
     idx = 1
     for d, s in zip(datas, segs):
         shutil.copy(d, join(imagesTr, f'ACDC{idx}_0000.nii.gz'))
-        shutil.copy(d, join(labelsTr, f'ACDC{idx}.nii.gz'))
+        shutil.copy(s, join(labelsTr, f'ACDC{idx}.nii.gz'))
         idx+=1
     
     command = 'nnUNet_raw=nnUNet_raw nnUNet_preprocessed=nnUNet_preprocessed nnUNet_results="" \
