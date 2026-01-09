@@ -8,12 +8,12 @@ from nnunetv2.experiment_planning.experiment_planners.network_topology import ge
 # when get_pool_and_conv_props is called multiple times
 
 def without_workaround(
-        patch_size: tuple | np.ndarray, 
-        spacing: tuple | np.ndarray, 
-        shape_must_be_divisible_by: tuple | np.ndarray, 
-        axis_to_be_reduced: int
-    ):
-    
+    patch_size: tuple | np.ndarray,
+    spacing: tuple | np.ndarray,
+    shape_must_be_divisible_by: tuple | np.ndarray,
+    axis_to_be_reduced: int
+):
+
     UNet_featuremap_min_edge_length = 4
     
     patch_size = list(patch_size)
@@ -30,21 +30,21 @@ def without_workaround(
     shape_must_be_divisible_by = get_pool_and_conv_props(spacing, patch_size,
                                                             UNet_featuremap_min_edge_length,
                                                             999999)
-    return (network_num_pool_per_axis, 
-            pool_op_kernel_sizes, 
-            conv_kernel_sizes, 
-            patch_size, 
+    return (network_num_pool_per_axis,
+            pool_op_kernel_sizes,
+            conv_kernel_sizes,
+            patch_size,
             shape_must_be_divisible_by)
 
 def with_workaround(
-        patch_size: tuple | np.ndarray, 
-        spacing: tuple | np.ndarray, 
-        shape_must_be_divisible_by: tuple | np.ndarray, 
-        axis_to_be_reduced: int
+    patch_size: tuple | np.ndarray,
+    spacing: tuple | np.ndarray,
+    shape_must_be_divisible_by: tuple | np.ndarray,
+    axis_to_be_reduced: int
 ):
-    
+
     UNet_featuremap_min_edge_length = 4
-    
+
     patch_size = list(patch_size)
     tmp = deepcopy(patch_size)
     tmp[axis_to_be_reduced] -= shape_must_be_divisible_by[axis_to_be_reduced]
@@ -59,17 +59,17 @@ def with_workaround(
     shape_must_be_divisible_by = get_pool_and_conv_props(spacing, patch_size,
                                                             UNet_featuremap_min_edge_length,
                                                             999999)
-    return (network_num_pool_per_axis, 
-            pool_op_kernel_sizes, 
-            conv_kernel_sizes, 
-            patch_size, 
+    return (network_num_pool_per_axis,
+            pool_op_kernel_sizes,
+            conv_kernel_sizes,
+            patch_size,
             shape_must_be_divisible_by)
 
 def main(
-        patch_size,
-        spacing,
-        shape_must_be_divisible_by,
-        axis_to_be_reduced
+    patch_size,
+    spacing,
+    shape_must_be_divisible_by,
+    axis_to_be_reduced
 ):
     og_ps = deepcopy(patch_size)
     network_num_pool_per_axis, pool_op_kernel_sizes, conv_kernel_sizes, \

@@ -78,21 +78,24 @@ def preprocessing_iterator_fromfiles(list_of_lists: List[List[str]],
     for i in range(num_processes):
         event = manager.Event()
         queue = Manager().Queue(maxsize=1)
-        pr = context.Process(target=preprocess_fromfiles_save_to_queue,
-                     args=(
-                         list_of_lists[i::num_processes],
-                         list_of_segs_from_prev_stage_files[
-                         i::num_processes] if list_of_segs_from_prev_stage_files is not None else None,
-                         output_filenames_truncated[
-                         i::num_processes] if output_filenames_truncated is not None else None,
-                         plans_manager,
-                         dataset_json,
-                         configuration_manager,
-                         queue,
-                         event,
-                         abort_event,
-                         verbose
-                     ), daemon=True)
+        pr = context.Process(
+            target=preprocess_fromfiles_save_to_queue,
+            args=(
+                list_of_lists[i::num_processes],
+                list_of_segs_from_prev_stage_files[
+                i::num_processes] if list_of_segs_from_prev_stage_files is not None else None,
+                output_filenames_truncated[
+                i::num_processes] if output_filenames_truncated is not None else None,
+                plans_manager,
+                dataset_json,
+                configuration_manager,
+                queue,
+                event,
+                abort_event,
+                verbose
+            ), 
+            daemon=True
+        )
         pr.start()
         target_queues.append(queue)
         done_events.append(event)

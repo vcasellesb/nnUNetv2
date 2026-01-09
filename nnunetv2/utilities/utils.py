@@ -35,7 +35,7 @@ def get_identifiers_from_splitted_dataset_folder(folder: str, file_ending: str):
 
 
 def create_paths_fn(folder, files, file_ending, f):
-    p = re.compile(re.escape(f) + r"_\d\d\d\d" + re.escape(file_ending))            
+    p = re.compile(re.escape(f) + r"_\d\d\d\d" + re.escape(file_ending))
     return [join(folder, i) for i in files if p.fullmatch(i)]
 
 

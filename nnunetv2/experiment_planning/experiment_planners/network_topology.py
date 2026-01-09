@@ -106,3 +106,9 @@ def get_pool_and_conv_props(spacing, patch_size, min_feature_map_size, max_numpo
     # we need to add one more conv_kernel_size for the bottleneck. We always use 3x3(x3) conv here
     conv_kernel_sizes.append([3]*dim)
     return num_pool_per_axis, _to_tuple(pool_op_kernel_sizes), _to_tuple(conv_kernel_sizes), tuple(patch_size), must_be_divisible_by
+
+if __name__ == "__main__":
+    spacing = (5., 1.5625, 1.5625)
+    patch_size = (20, 256, 224)
+    res = get_pool_and_conv_props(spacing, patch_size, min_feature_map_size=4, max_numpool=99999)
+    print(res)
